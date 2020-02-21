@@ -1,4 +1,20 @@
 import typing as tp
+from functools import wraps
+
+
+def sort_output(func):
+    """Decorator create a copy of input data, sort
+    copy and return this new copy with sorted data
+    
+    Arguments:
+        func {[function]} -- any inplace sorting function
+    """
+    @wraps(func)
+    def wrapper(data: tp.List[int], *args, **kwargs):
+        copy_of_data = data.copy()
+        func(copy_of_data, *args, **kwargs)
+        return copy_of_data
+    return wrapper
 
 
 def select_sort_inplace(data: tp.List[int], ascending=True) -> None:
@@ -21,6 +37,7 @@ def select_sort_inplace(data: tp.List[int], ascending=True) -> None:
         start_ind += 1
 
 
+@sort_output
 def select_sort(data: tp.List[int], ascending=True) -> tp.List[int]:
     """""Select sorting
     
@@ -31,6 +48,4 @@ def select_sort(data: tp.List[int], ascending=True) -> tp.List[int]:
         tp.List[int] -- ordered list with integers
         ascending {bool} -- direction of soring
     """
-    result: tp.List[int] = data.copy()
-    select_sort_inplace(result, ascending=ascending)
-    return result
+    select_sort_inplace(data, ascending=ascending)
